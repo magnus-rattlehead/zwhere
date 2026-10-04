@@ -8,6 +8,11 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+    const work_queue = b.addModule("work_queue", .{
+        .root_source_file = b.path("src/work_queue/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
     const exe = b.addExecutable(.{
         .name = "zwhere",
         .root_module = b.createModule(.{
@@ -17,6 +22,7 @@ pub fn build(b: *std.Build) void {
         }),
     });
     exe.root_module.addImport("search", search);
+    exe.root_module.addImport("work_queue", work_queue);
 
     b.installArtifact(exe);
     const run_exe = b.addRunArtifact(exe);
